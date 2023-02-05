@@ -1,3 +1,47 @@
-Qn1:
+Q1:
+I deleted the voting pod and there is no impact on application, it working fine. Observed that a new voting pod is automatically got created with a new id.
 
-I delete the voting app pod and there is no impact on application running, and there will be a new pod for voting app will be created.
+**********************
+[root@ip-172-31-3-174 k8s-specifications]# kubectl delete po vote-94849dc97-97jsp
+pod "vote-94849dc97-97jsp" deleted
+[root@ip-172-31-3-174 k8s-specifications]# kubectl get po
+NAME                      READY   STATUS    RESTARTS   AGE
+db-b54cd94f4-dnl4z        1/1     Running   0          42m
+redis-868d64d78-gnghr     1/1     Running   0          42m
+result-5d57b59f4b-blqcz   1/1     Running   0          42m
+vote-94849dc97-4rzt4      1/1     Running   0          8s
+
+*********************
+
+Q2:
+I delete the worker pod and there is no impact on the application , its working fine. Observed that a new worker pod is automatically got created with a new id.
+
+**********************************
+[root@ip-172-31-3-174 k8s-specifications]# kubectl delete po worker-dd46d7584-cdvwg
+pod "worker-dd46d7584-cdvwg" deleted
+[root@ip-172-31-3-174 k8s-specifications]# kubectl get po
+NAME                      READY   STATUS    RESTARTS   AGE
+db-b54cd94f4-dnl4z        1/1     Running   0          49m
+redis-868d64d78-gnghr     1/1     Running   0          49m
+result-5d57b59f4b-blqcz   1/1     Running   0          49m
+vote-94849dc97-4rzt4      1/1     Running   0          7m8s
+worker-dd46d7584-rtzmw    1/1     Running   0          32s
+
+**********************************
+
+Q3:
+I delete the db pod and there is an impact on the application,  its working fine but there is an issue which I obserbed is that the application lost all 
+the voting records data and it's started with a fresh db where vote count started again from 0.
+Again observed that result and worker app, which both have connection with db pod get restarted.
+
+****************************
+kubectl delete po db-b54cd94f4-dnl4z
+pod "db-b54cd94f4-dnl4z" deleted
+[root@ip-172-31-3-174 k8s-specifications]# kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+db-b54cd94f4-2vwsm        1/1     Running   0          98s
+redis-868d64d78-gnghr     1/1     Running   0          54m
+result-5d57b59f4b-blqcz   1/1     Running   1          54m
+vote-94849dc97-4rzt4      1/1     Running   0          12m
+worker-dd46d7584-rtzmw    1/1     Running   1          5m24s
+****************************
