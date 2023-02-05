@@ -1,0 +1,3 @@
+Qn1:
+
+I delete the voting app pod and there is no impact on application running, and there will be a new pod for voting app will be created.
